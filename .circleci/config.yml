@@ -12,14 +12,16 @@ jobs:
       - run:
           name: build android archive
           command: |
+            cd ~
             git clone https://github.com/facebook/react-native --depth=1
             cd react-native
             docker run --rm --name rn-build -v $PWD:/pwd -w /pwd react-native-community/react-native /bin/sh -c "./gradlew installArchives && npm pack"
       - store_artifacts:
-          path: ./*.tgz
+          path: ~/react-native/*.tgz
       - run:
           name: build RNTester
           command: |
+            cd ~/react-native
             docker run --rm --name rn-build -v $PWD:/pwd -w /pwd react-native-community/react-native /bin/sh -c "npm i && ./gradlew RNTester:android:app:assembleRelease"
 
 workflows:
